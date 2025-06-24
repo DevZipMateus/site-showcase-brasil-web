@@ -1,10 +1,32 @@
-
 import React from 'react';
 import { ExternalLink, Code, Globe, Briefcase } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-const portfolioData = {
+interface Site {
+  name: string;
+  description: string;
+  url: string;
+}
+
+interface Category {
+  title: string;
+  sites: Site[];
+}
+
+interface SectionWithCategories {
+  title: string;
+  categories: Record<string, Category>;
+}
+
+interface SectionWithSites {
+  title: string;
+  sites: Site[];
+}
+
+type PortfolioSection = SectionWithCategories | SectionWithSites;
+
+const portfolioData: Record<string, PortfolioSection> = {
   commerce: {
     title: "🛒 Comércio",
     categories: {
@@ -166,7 +188,7 @@ const portfolioData = {
   }
 };
 
-const SiteCard = ({ site }: { site: { name: string; description: string; url: string } }) => (
+const SiteCard = ({ site }: { site: Site }) => (
   <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-l-4 border-l-blue-500">
     <CardContent className="p-4">
       <div className="flex items-start justify-between">
@@ -189,7 +211,7 @@ const SiteCard = ({ site }: { site: { name: string; description: string; url: st
   </Card>
 );
 
-const CategorySection = ({ title, sites }: { title: string; sites: any[] }) => (
+const CategorySection = ({ title, sites }: { title: string; sites: Site[] }) => (
   <div className="mb-8">
     <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
       {title}
@@ -206,12 +228,12 @@ const CategorySection = ({ title, sites }: { title: string; sites: any[] }) => (
 );
 
 const Index = () => {
-  const totalSites = Object.values(portfolioData).reduce((total, section: any) => {
-    if (section.sites) {
+  const totalSites = Object.values(portfolioData).reduce((total, section) => {
+    if ('sites' in section) {
       return total + section.sites.length;
     }
-    if (section.categories) {
-      return total + Object.values(section.categories).reduce((catTotal: number, category: any) => 
+    if ('categories' in section) {
+      return total + Object.values(section.categories).reduce((catTotal, category) => 
         catTotal + category.sites.length, 0
       );
     }
@@ -256,15 +278,15 @@ const Index = () => {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-7xl mx-auto">
-          {Object.entries(portfolioData).map(([key, section]: [string, any]) => (
+          {Object.entries(portfolioData).map(([key, section]) => (
             <section key={key} className="mb-16">
               <div className="bg-white rounded-lg shadow-sm border p-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-blue-100">
                   {section.title}
                 </h2>
                 
-                {section.categories ? (
-                  Object.entries(section.categories).map(([catKey, category]: [string, any]) => (
+                {'categories' in section ? (
+                  Object.entries(section.categories).map(([catKey, category]) => (
                     <CategorySection
                       key={catKey}
                       title={category.title}
