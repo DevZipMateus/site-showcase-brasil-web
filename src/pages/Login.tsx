@@ -7,31 +7,29 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, Lock, UserPlus, LogIn } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Login = () => {
   const [loginData, setLoginData] = useState({ usuario: '', senha: '' });
   const [cadastroData, setCadastroData] = useState({ usuario: '', senha: '', confirmarSenha: '' });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { login, register } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simular chamada à API
     try {
-      console.log('Dados de login:', loginData);
-      // Aqui você faria a chamada real para o backend PHP
-      // const response = await fetch('/login.php', { method: 'POST', ... });
-      
+      await login(loginData.usuario, loginData.senha);
       toast({
-        title: "Login realizado",
+        title: "Login realizado com sucesso",
         description: `Bem-vindo, ${loginData.usuario}!`,
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro no login",
-        description: "Usuário ou senha incorretos.",
+        description: error.message || "Usuário ou senha incorretos.",
         variant: "destructive",
       });
     } finally {
@@ -54,20 +52,17 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      console.log('Dados de cadastro:', cadastroData);
-      // Aqui você faria a chamada real para o backend PHP
-      // const response = await fetch('/cadastro.php', { method: 'POST', ... });
-      
+      await register(cadastroData.usuario, cadastroData.senha);
       toast({
-        title: "Cadastro realizado",
+        title: "Cadastro realizado com sucesso",
         description: "Conta criada com sucesso! Faça login para continuar.",
       });
       
       setCadastroData({ usuario: '', senha: '', confirmarSenha: '' });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro no cadastro",
-        description: "Não foi possível criar a conta.",
+        description: error.message || "Não foi possível criar a conta.",
         variant: "destructive",
       });
     } finally {

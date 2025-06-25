@@ -2,6 +2,7 @@ import React from 'react';
 import { ExternalLink, Code, Globe, Briefcase } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import Header from '@/components/Header';
 
 interface Site {
   name: string;
@@ -242,6 +243,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <Header />
+      
       {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 to-blue-900 text-white">
         <div className="container mx-auto px-6 py-16">
