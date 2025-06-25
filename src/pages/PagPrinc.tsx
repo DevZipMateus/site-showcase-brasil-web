@@ -206,14 +206,15 @@ const CategorySection = ({ title, sites }: { title: string; sites: any[] }) => (
 );
 
 const PagPrinc = () => {
-  const totalSites = Object.values(portfolioData).reduce((total, section: any) => {
+  const totalSites = Object.values(portfolioData).reduce((total: number, section: any): number => {
     if (section.sites) {
       return total + section.sites.length;
     }
     if (section.categories) {
-      return total + Object.values(section.categories).reduce((catTotal: number, category: any) => 
+      const categoryTotal = Object.values(section.categories).reduce((catTotal: number, category: any): number => 
         catTotal + (category.sites ? category.sites.length : 0), 0
       );
+      return total + categoryTotal;
     }
     return total;
   }, 0);
