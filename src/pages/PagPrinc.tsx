@@ -192,8 +192,8 @@ const portfolioData: Record<string, PortfolioSection> = {
 
 const SiteCard = ({ site }: { site: Site }) => {
   const handlePurchase = () => {
-    // Redirect to contact page with site name as model parameter
-    window.location.href = `contato.php?modelo=${encodeURIComponent(site.name)}`;
+    // Redirect to contact page with ModeloX as model parameter
+    window.location.href = 'https://facaseusite.com.br/contato.php?modelo=ModeloX';
   };
 
   return (
