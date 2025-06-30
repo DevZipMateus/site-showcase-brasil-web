@@ -1,7 +1,8 @@
 import React from 'react';
-import { ExternalLink, Code, Globe, Briefcase } from 'lucide-react';
+import { ExternalLink, Code, Globe, Briefcase, ShoppingCart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface Site {
   name: string;
@@ -188,28 +189,44 @@ const portfolioData: Record<string, PortfolioSection> = {
   }
 };
 
-const SiteCard = ({ site }: { site: Site }) => (
-  <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-l-4 border-l-blue-500">
-    <CardContent className="p-4">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-            {site.name}
-          </h4>
-          <p className="text-sm text-gray-600 mt-1">{site.description}</p>
+const SiteCard = ({ site }: { site: Site }) => {
+  const handlePurchase = () => {
+    // Redirect to purchase page with site name as parameter
+    window.open(`https://facaseusite.com.br/comprar?modelo=${encodeURIComponent(site.name)}`, '_blank');
+  };
+
+  return (
+    <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-l-4 border-l-blue-500">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1">
+            <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+              {site.name}
+            </h4>
+            <p className="text-sm text-gray-600 mt-1">{site.description}</p>
+          </div>
+          <a
+            href={site.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-3 p-2 text-gray-400 hover:text-blue-600 transition-colors"
+          >
+            <ExternalLink size={16} />
+          </a>
         </div>
-        <a
-          href={site.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ml-3 p-2 text-gray-400 hover:text-blue-600 transition-colors"
+        
+        <Button 
+          onClick={handlePurchase}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium"
+          size="sm"
         >
-          <ExternalLink size={16} />
-        </a>
-      </div>
-    </CardContent>
-  </Card>
-);
+          <ShoppingCart className="w-4 h-4 mr-2" />
+          Quero este modelo
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
 
 const CategorySection = ({ title, sites }: { title: string; sites: Site[] }) => (
   <div className="mb-8">
