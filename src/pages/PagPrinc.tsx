@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ExternalLink, Code, Globe, Briefcase, ShoppingCart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -191,8 +192,8 @@ const portfolioData: Record<string, PortfolioSection> = {
 
 const SiteCard = ({ site }: { site: Site }) => {
   const handlePurchase = () => {
-    // Redirect to purchase page with site name as parameter
-    window.open(`https://facaseusite.com.br/comprar?modelo=${encodeURIComponent(site.name)}`, '_blank');
+    // Redirect to contact page with site name as model parameter
+    window.location.href = `contato.php?modelo=${encodeURIComponent(site.name)}`;
   };
 
   return (
