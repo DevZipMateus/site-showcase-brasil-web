@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 const LoginPage = () => {
   const handleLogin = () => {
-    window.location.href = 'https://facaseusite.com.br/login.html';
+    // Simula o login e redireciona para a galeria editável
+    window.location.href = '/galeria-editavel';
   };
 
   const handleRegister = () => {
