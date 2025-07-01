@@ -1,12 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Edit } from 'lucide-react';
+import { Plus, Upload, X } from 'lucide-react';
 
 interface Photo {
   id: number;
@@ -56,6 +55,49 @@ const EditableGallery = () => {
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleFileUpload = useCallback((file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          setNewPhoto(prev => ({ ...prev, url: result }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    const imageFile = files.find(file => file.type.startsWith('image/'));
+    
+    if (imageFile) {
+      handleFileUpload(imageFile);
+    }
+  }, [handleFileUpload]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
 
   const handleAddPhoto = () => {
     if (newPhoto.url && newPhoto.title) {
@@ -103,13 +145,68 @@ const EditableGallery = () => {
                   Adicionar Nova Foto
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                   <DialogTitle>Adicionar Nova Foto</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
+                  {/* Drag and Drop Area */}
                   <div className="grid gap-2">
-                    <Label htmlFor="url">URL da Imagem</Label>
+                    <Label>Imagem</Label>
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                        isDragOver 
+                          ? 'border-primary bg-primary/5' 
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      {newPhoto.url ? (
+                        <div className="relative">
+                          <img
+                            src={newPhoto.url}
+                            alt="Preview"
+                            className="max-h-40 mx-auto rounded-lg object-cover"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="absolute top-2 right-2"
+                            onClick={() => setNewPhoto(prev => ({ ...prev, url: '' }))}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <Upload className="h-8 w-8 mx-auto text-gray-400" />
+                          <div>
+                            <p className="text-sm text-gray-600">
+                              Arraste uma imagem aqui ou{' '}
+                              <label className="text-primary cursor-pointer hover:underline">
+                                selecione um arquivo
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleFileSelect}
+                                  className="hidden"
+                                />
+                              </label>
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              PNG, JPG, GIF até 10MB
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* URL Input Alternative */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="url">Ou cole uma URL da imagem</Label>
                     <Input
                       id="url"
                       value={newPhoto.url}
@@ -117,6 +214,7 @@ const EditableGallery = () => {
                       placeholder="https://exemplo.com/imagem.jpg"
                     />
                   </div>
+
                   <div className="grid gap-2">
                     <Label htmlFor="title">Título</Label>
                     <Input
