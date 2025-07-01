@@ -1,8 +1,8 @@
 
-import Login from './Login';
+import Gallery from './Gallery';
 
 const Index = () => {
-  return <Login />;
+  return <Gallery />;
 };
 
 export default Index;
