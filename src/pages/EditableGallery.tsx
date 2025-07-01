@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Upload, X } from 'lucide-react';
+import { Plus, Upload, X, Briefcase } from 'lucide-react';
 import { getAllPhotos, addPhoto } from '@/utils/photoStorage';
 import { toast } from '@/components/ui/use-toast';
 
@@ -103,15 +103,25 @@ const EditableGallery = () => {
     window.location.href = '/';
   };
 
+  const handleGoToPortfolio = () => {
+    window.location.href = '/pag-princ';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
       {/* Header */}
       <header className="w-full p-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Galeria Editável</h1>
-          <Button onClick={handleLogout} variant="outline" size="lg">
-            Sair
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleGoToPortfolio} variant="outline" size="lg">
+              <Briefcase className="mr-2 h-4 w-4" />
+              Ver Portfólio
+            </Button>
+            <Button onClick={handleLogout} variant="outline" size="lg">
+              Sair
+            </Button>
+          </div>
         </div>
       </header>
 
