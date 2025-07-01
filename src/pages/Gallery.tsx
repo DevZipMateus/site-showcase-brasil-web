@@ -1,35 +1,34 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { getAllPhotos } from '@/utils/photoStorage';
+
+interface Photo {
+  id: number;
+  url: string;
+  title: string;
+  caption: string;
+}
+
 const Gallery = () => {
-  const photos = [{
-    id: 1,
-    url: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7',
-    alt: 'Mulher usando laptop na cama'
-  }, {
-    id: 2,
-    url: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
-    alt: 'Laptop cinza ligado'
-  }, {
-    id: 3,
-    url: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
-    alt: 'Placa de circuito preta'
-  }, {
-    id: 4,
-    url: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
-    alt: 'Monitor mostrando programação Java'
-  }, {
-    id: 5,
-    url: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
-    alt: 'Pessoa usando MacBook Pro'
-  }];
+  const [photos, setPhotos] = useState<Photo[]>([]);
+
+  useEffect(() => {
+    const allPhotos = getAllPhotos();
+    setPhotos(allPhotos);
+  }, []);
+
   const handleContinue = () => {
     window.location.href = '/login';
   };
+
   const handleLogin = () => {
     window.location.href = '/login';
   };
-  return <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
       {/* Header with Login Button */}
       <header className="w-full p-4">
         <div className="max-w-6xl mx-auto flex justify-end">
@@ -48,18 +47,32 @@ const Gallery = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {photos.map(photo => <Card key={photo.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            {photos.map(photo => (
+              <Card key={photo.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-0">
-                  <img src={photo.url} alt={photo.alt} className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" />
+                  <div className="relative">
+                    <img 
+                      src={photo.url} 
+                      alt={photo.caption || photo.title} 
+                      className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300" 
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                      <h3 className="text-white font-semibold text-lg mb-1">{photo.title}</h3>
+                      <p className="text-white/90 text-sm">{photo.caption}</p>
+                    </div>
+                  </div>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
           
           <div className="text-center">
-            
+            {/* Conteúdo adicional pode ser adicionado aqui */}
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Gallery;
