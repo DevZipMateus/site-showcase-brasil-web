@@ -24,7 +24,7 @@ const Gallery = () => {
   };
 
   const handleLogin = () => {
-    window.location.href = '/login';
+    window.location.href = 'https://facaseusite.com.br/login.html';
   };
 
   return (
