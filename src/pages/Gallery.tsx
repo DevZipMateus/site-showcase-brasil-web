@@ -36,6 +36,10 @@ const Gallery = () => {
     window.location.href = '/login';
   };
 
+  const handleLogin = () => {
+    window.location.href = '/login';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4">
       <div className="max-w-6xl mx-auto">
@@ -58,9 +62,17 @@ const Gallery = () => {
           ))}
         </div>
         
-        <div className="text-center">
+        <div className="text-center space-y-4">
+          <Button 
+            onClick={handleLogin}
+            size="lg"
+            className="px-8 py-3 text-lg mr-4"
+          >
+            Fazer Login
+          </Button>
           <Button 
             onClick={handleContinue}
+            variant="outline"
             size="lg"
             className="px-8 py-3 text-lg"
           >
